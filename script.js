@@ -1,5 +1,3 @@
-// ✅ Обединен и изчистен script.js
-
 document.addEventListener("DOMContentLoaded", function () {
   const colorPicker = document.getElementById("colorPicker");
   const resetBtn = document.getElementById("resetBtn");
@@ -7,30 +5,24 @@ document.addEventListener("DOMContentLoaded", function () {
   const downloadBtn = document.getElementById("downloadBtn");
   const themeBtn = document.getElementById("toggleTheme");
   const shuffleBtn = document.getElementById("shuffleGroups");
-
   const svgElement = document.getElementById("worldMap");
   const defaultColor = "#ccc";
   const selectedColors = {};
   const paths = svgElement.querySelectorAll("path");
-  
 
   const colorGroups = {
-    group1: [],
-    group2: [],
-    group3: [],
-    group4: [],
-    group5: []
+    group1: [], group2: [], group3: [], group4: [], group5: []
   };
 
   const groupColors = {
-    group1: "#ffcc00", // жълто
-    group2: "#66ccff", // синьо
-    group3: "#cccccc", // сиво
-    group4: "#99cc66", // зелено
-    group5: "#ff9999"  // розово
+    group1: "#ffcc00",
+    group2: "#66ccff",
+    group3: "#cccccc",
+    group4: "#99cc66",
+    group5: "#ff9999"
   };
 
-  const groupLookup = new Map(); // ID → groupName
+  const groupLookup = new Map();
 
   function assignRandomGroups() {
     Object.keys(colorGroups).forEach(group => colorGroups[group] = []);
@@ -80,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Плавно оцветяване на група
+  // Плавно оцветяване
   function smoothColoring(ids, color) {
     let index = 0;
     function step() {
@@ -98,11 +90,10 @@ document.addEventListener("DOMContentLoaded", function () {
     requestAnimationFrame(step);
   }
 
-  // Клик върху страна → оцвети групата
+  // Клик върху държава
   svgElement.addEventListener("click", (e) => {
     const path = e.target.closest("path");
     if (!path || !path.id) return;
-
     const clickedId = path.id;
     const color = colorPicker.value;
     const groupName = groupLookup.get(clickedId);
@@ -130,7 +121,7 @@ document.addEventListener("DOMContentLoaded", function () {
     alert("Конфигурацията е запазена.");
   });
 
-  // Изтегляне като PNG
+  // Изтегляне
   downloadBtn.addEventListener("click", () => {
     html2canvas(document.querySelector("#svg-container")).then(canvas => {
       const link = document.createElement('a');
@@ -140,68 +131,60 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // Тема
+  // Теми
   function applyTheme(theme) {
-  // Премахваме и добавяме класа правилно
-  if (theme === "dark") {
-    document.body.classList.add("dark-theme");
-  } else {
-    document.body.classList.remove("dark-theme");
+    if (theme === "dark") {
+      document.body.classList.add("dark-theme");
+    } else {
+      document.body.classList.remove("dark-theme");
+    }
+
+    localStorage.setItem("theme", theme);
+    themeBtn.innerHTML = `<span class="icon">${theme === "dark" ? "☀️" : "🌙"}</span> Смени тема`;
+
+    const lightLogo = document.querySelector(".logo.light-only");
+    const darkLogo = document.querySelector(".logo.dark-only");
+
+    if (theme === "dark") {
+      if (lightLogo) lightLogo.style.display = "none";
+      if (darkLogo) darkLogo.style.display = "block";
+    } else {
+      if (lightLogo) lightLogo.style.display = "block";
+      if (darkLogo) darkLogo.style.display = "none";
+    }
   }
-
-  // Записваме темата
-  localStorage.setItem("theme", theme);
-
-  // Променяме текста и иконата на бутона
-  themeBtn.innerHTML = `<span class="icon">${theme === "dark" ? "☀️" : "🌙"}</span> Смени тема`;
-
-  // Смяна на логото
-  const lightLogo = document.querySelector(".logo.light-only");
-  const darkLogo = document.querySelector(".logo.dark-only");
-
-  if (theme === "dark") {
-    if (lightLogo) lightLogo.style.display = "none";
-    if (darkLogo) darkLogo.style.display = "block";
-  } else {
-    if (lightLogo) lightLogo.style.display = "block";
-    if (darkLogo) darkLogo.style.display = "none";
-  }
-}
-
 
   themeBtn.addEventListener("click", () => {
-  const isDark = document.body.classList.toggle("dark-theme");
-  const newTheme = isDark ? "dark" : "light";
-  localStorage.setItem("theme", newTheme);
+    const isDark = document.body.classList.toggle("dark-theme");
+    const newTheme = isDark ? "dark" : "light";
+    localStorage.setItem("theme", newTheme);
+    themeBtn.innerHTML = `<span class="icon">${isDark ? "☀️" : "🌙"}</span> Смени тема`;
 
-  themeBtn.innerHTML = `<span class="icon">${isDark ? "☀️" : "🌙"}</span> Смени тема`;
+    const lightLogo = document.querySelector(".logo.light-only");
+    const darkLogo = document.querySelector(".logo.dark-only");
 
-  const lightLogo = document.querySelector(".logo.light-only");
-  const darkLogo = document.querySelector(".logo.dark-only");
-
-  if (isDark) {
-    if (lightLogo) lightLogo.style.display = "none";
-    if (darkLogo) darkLogo.style.display = "block";
-  } else {
-    if (lightLogo) lightLogo.style.display = "block";
-    if (darkLogo) darkLogo.style.display = "none";
-  }
-});
+    if (isDark) {
+      if (lightLogo) lightLogo.style.display = "none";
+      if (darkLogo) darkLogo.style.display = "block";
+    } else {
+      if (lightLogo) lightLogo.style.display = "block";
+      if (darkLogo) darkLogo.style.display = "none";
+    }
+  });
 
   applyTheme(localStorage.getItem("theme") || "light");
 
-  // Преразпределяне на групи
+  // Разбъркване
   shuffleBtn.addEventListener("click", () => {
     assignRandomGroups();
     setupLegendColorInputs();
     alert("Групите са разпределени на случаен принцип.");
   });
 
-  // Легенда с цветови инпути
+  // Смяна на цвят от инпутите
   function setupLegendColorInputs() {
     document.querySelectorAll('#legend input[type="color"]').forEach(input => {
       input.removeEventListener("input", input._handler || (() => {}));
-
       const handler = () => {
         const group = input.dataset.group;
         const newColor = input.value;
@@ -215,17 +198,15 @@ document.addEventListener("DOMContentLoaded", function () {
           }
         });
       };
-
       input._handler = handler;
       input.addEventListener("input", handler);
     });
   }
 
-  // Старт
   assignRandomGroups();
   setupLegendColorInputs();
 
-  // Активиране на мащабиране
+  // svg-pan-zoom
   svgPanZoom('#worldMap', {
     zoomEnabled: true,
     controlIconsEnabled: true,
@@ -233,40 +214,43 @@ document.addEventListener("DOMContentLoaded", function () {
     center: true
   });
 
-function makeDraggable(el) {
-  let isDragging = false;
-  let offsetX = 0, offsetY = 0;
+  // Влачене на легендата
+  function makeDraggable(el) {
+    let isDragging = false;
+    let offsetX = 0, offsetY = 0;
 
-  el.addEventListener("mousedown", (e) => {
-    isDragging = true;
-    offsetX = e.clientX - el.getBoundingClientRect().left;
-    offsetY = e.clientY - el.getBoundingClientRect().top;
+    el.addEventListener("mousedown", (e) => {
+      isDragging = true;
+      offsetX = e.clientX - el.getBoundingClientRect().left;
+      offsetY = e.clientY - el.getBoundingClientRect().top;
 
-    el.style.position = "fixed";
-    el.style.zIndex = 9999;
-    el.style.bottom = "auto";
-    el.style.right = "auto";
-  });
+      el.style.position = "fixed";
+      el.style.zIndex = 9999;
+      el.style.bottom = "auto";
+      el.style.right = "auto";
+    });
 
-  document.addEventListener("mousemove", (e) => {
-    if (isDragging) {
-      el.style.left = `${e.clientX - offsetX}px`;
-      el.style.top = `${e.clientY - offsetY}px`;
-    }
-  });
+    document.addEventListener("mousemove", (e) => {
+      if (isDragging) {
+        el.style.left = `${e.clientX - offsetX}px`;
+        el.style.top = `${e.clientY - offsetY}px`;
+      }
+    });
 
-  document.addEventListener("mouseup", () => {
-    isDragging = false;
-  });
-}
-
-// Активиране на влаченето след зареждане
-document.addEventListener("DOMContentLoaded", () => {
-  const legend = document.getElementById("legend");
-  if (legend) {
-    makeDraggable(legend);
+    document.addEventListener("mouseup", () => {
+      isDragging = false;
+    });
   }
-});
 
+  const legend = document.getElementById("legend");
+  const toggleBtn = document.getElementById("toggleLegend");
 
+  if (legend) makeDraggable(legend);
+
+  if (legend && toggleBtn) {
+    toggleBtn.addEventListener("click", () => {
+      legend.classList.toggle("hidden");
+      toggleBtn.textContent = legend.classList.contains("hidden") ? "👁" : "✖";
+    });
+  }
 });
