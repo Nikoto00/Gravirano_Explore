@@ -1,0 +1,188 @@
+:root {
+  --bg: #f9f9fb;
+  --primary: #2c3e50;
+  --accent: #007bff;
+  --accent-hover: #0056b3;
+  --tooltip-bg: rgba(0, 0, 0, 0.75);
+  --border-radius: 10px;
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --button-icon-size: 18px;
+}
+
+body.dark-theme {
+  --bg: #1e1e1e;
+  --primary: #f0f0f0;
+  --accent: #2e8bff;
+  --accent-hover: #1a6fd8;
+  --tooltip-bg: rgba(255, 255, 255, 0.9);
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--primary);
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+h1 {
+  font-size: 2.2rem;
+  margin-bottom: 30px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+#controls {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+#colorPicker {
+  appearance: none;
+  border: 2px solid #ddd;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  box-shadow: var(--box-shadow);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+#colorPicker:hover {
+  transform: scale(1.1);
+}
+
+button {
+  background: var(--accent);
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: var(--box-shadow);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+button:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+button .icon {
+  font-size: var(--button-icon-size);
+  line-height: 1;
+}
+
+#svg-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #f4f7fa, #dce9f4);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 25px;
+  overflow: auto;
+  position: relative;
+  transition: background 0.5s ease;
+}
+
+body.dark-theme #svg-container {
+  background: linear-gradient(135deg, #1f1f1f, #2b2b2b);
+}
+
+svg {
+  width: 100%;
+  height: auto;
+  transition: transform 0.3s ease-in-out;
+}
+
+svg path {
+  stroke: #333;
+  stroke-width: 0.5;
+  cursor: pointer;
+  transition: fill 0.35s ease, transform 0.2s ease;
+}
+
+svg path:hover {
+  filter: brightness(1.2);
+  transform: scale(1.01);
+}
+
+#legend {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg);
+  border: 1px solid #ccc;
+  padding: 8px 16px;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  box-shadow: var(--box-shadow);
+  transition: background 0.3s ease;
+}
+
+.floating-legend {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: var(--bg);
+  border: 1px solid #ccc;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 999;
+  opacity: 0.95;
+}
+
+.floating-legend .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.floating-legend input[type="color"] {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.logo.dark-only { display: none; }
+.logo.light-only { display: block; }
+
+body.dark-theme .logo.light-only { display: none; }
+body.dark-theme .logo.dark-only { display: block; }
+
+#logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+#logo-container img.logo {
+  height: 60px; /* 🔧 намали стойността според нуждите: 40px, 50px, 60px */
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+h1 {
+  text-align: center;
+}
+
